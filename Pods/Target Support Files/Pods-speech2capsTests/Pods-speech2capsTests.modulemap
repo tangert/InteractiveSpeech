@@ -1,0 +1,6 @@
+framework module Pods_speech2capsTests {
+  umbrella header "Pods-speech2capsTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

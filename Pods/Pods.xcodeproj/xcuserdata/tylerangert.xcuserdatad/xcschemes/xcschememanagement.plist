@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SchemeUserState</key>
+	<dict>
+		<key>EZAudio.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-speech2caps.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-speech2capsTests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-speech2capsUITests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>TPCircularBuffer.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>3DC56DE3098181991AE34A8D23BFEAA3</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>54A768F1B1DA5BF96993AD54AAD5D6DF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>68E504159A95438F18EAACAB7BBD121C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B42A1C563331D6A5A52594827651E956</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DA4ACAF97DA53DA13ADEE1C990A611F0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>

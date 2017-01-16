@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol SpeechDataDelegate {
     func didReceiveWord(input: String)
@@ -14,7 +15,7 @@ protocol SpeechDataDelegate {
 }
 
 protocol AudioDataDelegate {
-    func didUpdateData(data: Any)
+    func didUpdateData()
 }
 
 protocol AttributeStringDelegate {

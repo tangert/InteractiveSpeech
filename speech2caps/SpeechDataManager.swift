@@ -11,10 +11,13 @@ import UIKit
 
 class SpeechDataManager {
     
-    let sharedInstance = SpeechDataManager()
+    static var sharedInstance = SpeechDataManager()
     
     var originalTextArray: [String?]?
+    var fontSizes: [Int]?
     var attributedText: NSMutableAttributedString?
+    
+    func instantiate() { print("Instantiated") }
     
     init() {
         ViewController.speechDataDelegate = self
@@ -26,7 +29,7 @@ extension SpeechDataManager: SpeechDataDelegate {
     func didReceiveWord(input: String) {
         print("Got the shit!")
         originalTextArray?.append(input)
-        print(originalTextArray)
+        print(originalTextArray!)
     }
     
     func didReceiveSpeechSet(input: [String]) {

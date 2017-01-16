@@ -11,14 +11,14 @@ import UIKit
 
 class AudioDataManager {
     
-    let sharedInstance = AudioDataManager()
-    var allAudioData: [Float]?
-    var lowFreq: Float?
-    var lowAmp: Float?
-    var avgFreq: Float?
-    var avgAmp: Float?
-    var highFreq: Float?
-    var highAmp: Float?
+    static var sharedInstance = AudioDataManager()
+    var dBValues: [Float]?
+    var amplitudeValues: [Float]?
+    
+    var inputSensitivedBValues: [Float]?
+    var inputSensitiveAmplitudeValues: [Float]?
+    
+    func instantiate() { print("Instantiated") }
     
     init() {
         ViewController.audioDataDelegate = self
@@ -26,8 +26,6 @@ class AudioDataManager {
 }
 
 extension AudioDataManager: AudioDataDelegate {
-    func didUpdateData(data: Any) {
-        print("I'm receiving audio data! I'm the delegate!")
-        print(data)
+    func didUpdateData() {
     }
 }

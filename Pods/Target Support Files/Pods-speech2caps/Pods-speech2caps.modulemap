@@ -1,0 +1,6 @@
+framework module Pods_speech2caps {
+  umbrella header "Pods-speech2caps-umbrella.h"
+
+  export *
+  module * { export * }
+}
