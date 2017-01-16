@@ -8,21 +8,23 @@
 
 import Foundation
 import UIKit
+import Speech
 
 protocol SpeechDataDelegate {
     func didReceiveWord(input: String)
-    func didReceiveSpeechSet(input: [String])
+    func didReceiveSpeechSet(input: [SFTranscriptionSegment])
 }
 
 protocol AudioDataDelegate {
     func didUpdateDBValues(input: Float)
     func didUpdateAmplitude(input: Float)
+    func didReceiveSpeechSet()
 }
 
-protocol AttributeStringDelegate {
-    func didReceiveString(string: String)
+protocol CombinedDataDelegate {
+    func didFormatStrings(input: [NSAttributedString])
 }
 
-protocol ValueLabelUpdateDelegate {
-    func willUpdateLabel(input: Float)
+protocol TextFormatterDelegate {
+    func willFormatText()
 }

@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Speech
 
 class AudioDataManager {
     
@@ -35,5 +36,16 @@ extension AudioDataManager: AudioDataDelegate {
     
     func didUpdateAmplitude(input: Float) {
         self.amplitudeValues.append(input)
+    }
+    
+    func didReceiveSpeechSet() {
+        //this updates two arrays that contain the dB and ampliutude values that correspond to each time a word is uttered.
+        self.inputSensitivedBValues.append(dBValues.last!)
+        self.inputSensitiveAmplitudeValues.append(amplitudeValues.last!)
+        
+
+        CombinedDataManager.sharedInstance.amplitudes = inputSensitiveAmplitudeValues
+        print("Input sensitive Amplitude values: \(inputSensitiveAmplitudeValues)")
+        print("All amp vals: \(amplitudeValues)")
     }
 }

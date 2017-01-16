@@ -8,13 +8,15 @@
 
 import Foundation
 import UIKit
+import Speech
 
 class SpeechDataManager {
-    
+        
     static var sharedInstance = SpeechDataManager()
-    var originalTextArray: [String?]?
-    var fontSizes: [Int]?
+    var originalTextArray = [String]()
+    var fontSizes = [Int]()
     var attributedText: NSMutableAttributedString?
+    var textFormatDelegate: TextFormatterDelegate?
     
     func instantiate() { print("Instantiated") }
     
@@ -26,13 +28,16 @@ class SpeechDataManager {
 extension SpeechDataManager: SpeechDataDelegate {
     
     func didReceiveWord(input: String) {
-        print("Got the shit!")
-        originalTextArray?.append(input)
-        print(originalTextArray!)
     }
     
-    func didReceiveSpeechSet(input: [String]) {
+    func didReceiveSpeechSet(input: [SFTranscriptionSegment]) {
+        originalTextArray.removeAll()
+        for word in input {
+            originalTextArray.append(word.substring)
+        }
         
+        CombinedDataManager.sharedInstance.words = originalTextArray
+        SpeechDataManager.sharedInstance.textFormatDelegate?.willFormatText()
     }
 
 }

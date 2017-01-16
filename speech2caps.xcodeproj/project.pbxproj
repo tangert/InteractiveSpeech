@@ -19,7 +19,7 @@
 		3666E32A1E2AEBEA0097F210 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3666E3291E2AEBEA0097F210 /* Protocols.swift */; };
 		3666E32C1E2AEBF20097F210 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3666E32B1E2AEBF20097F210 /* Extensions.swift */; };
 		3666E3321E2B01C50097F210 /* AudioDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3666E3311E2B01C50097F210 /* AudioDataManager.swift */; };
-		3666E3351E2B091C0097F210 /* TextFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3666E3341E2B091C0097F210 /* TextFormatter.swift */; };
+		3678B6D61E2D6AE7008F9F30 /* CombinedDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3678B6D51E2D6AE7008F9F30 /* CombinedDataManager.swift */; };
 		C48E3DE73C560D112638169D /* Pods_speech2caps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FAB71F65A3EDAAB64B08A12 /* Pods_speech2caps.framework */; };
 		D5BBB63606BCE5D0291470DB /* Pods_speech2capsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A353EBE272A9761B1AC062F9 /* Pods_speech2capsTests.framework */; };
 /* End PBXBuildFile section */
@@ -74,7 +74,7 @@
 		3666E3291E2AEBEA0097F210 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		3666E32B1E2AEBF20097F210 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		3666E3311E2B01C50097F210 /* AudioDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioDataManager.swift; sourceTree = "<group>"; };
-		3666E3341E2B091C0097F210 /* TextFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFormatter.swift; sourceTree = "<group>"; };
+		3678B6D51E2D6AE7008F9F30 /* CombinedDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CombinedDataManager.swift; sourceTree = "<group>"; };
 		54AFBC757150D3C4320C9375 /* Pods-speech2caps.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-speech2caps.debug.xcconfig"; path = "Pods/Target Support Files/Pods-speech2caps/Pods-speech2caps.debug.xcconfig"; sourceTree = "<group>"; };
 		5ABCDDB8A380193EE3E890E3 /* Pods-speech2capsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-speech2capsTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-speech2capsTests/Pods-speech2capsTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7FAB71F65A3EDAAB64B08A12 /* Pods_speech2caps.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_speech2caps.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -126,6 +126,26 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		3651D6F41E2D7C0A00BD7ACC /* Data Managers */ = {
+			isa = PBXGroup;
+			children = (
+				3666E3271E2AEBE20097F210 /* SpeechDataManager.swift */,
+				3666E3311E2B01C50097F210 /* AudioDataManager.swift */,
+				3678B6D51E2D6AE7008F9F30 /* CombinedDataManager.swift */,
+			);
+			name = "Data Managers";
+			sourceTree = "<group>";
+		};
+		3651D6F51E2D7C1E00BD7ACC /* Supporting */ = {
+			isa = PBXGroup;
+			children = (
+				3666E3291E2AEBEA0097F210 /* Protocols.swift */,
+				3666E32B1E2AEBF20097F210 /* Extensions.swift */,
+				365ACA0A1E2C0D7600186D98 /* speech2caps-Bridging-Header.h */,
+			);
+			name = Supporting;
+			sourceTree = "<group>";
+		};
 		365B76A41E2586D5009CDE10 = {
 			isa = PBXGroup;
 			children = (
@@ -153,12 +173,8 @@
 			children = (
 				365B76B01E2586D5009CDE10 /* AppDelegate.swift */,
 				365B76B21E2586D5009CDE10 /* ViewController.swift */,
-				3666E3271E2AEBE20097F210 /* SpeechDataManager.swift */,
-				3666E3311E2B01C50097F210 /* AudioDataManager.swift */,
-				3666E3341E2B091C0097F210 /* TextFormatter.swift */,
-				3666E3291E2AEBEA0097F210 /* Protocols.swift */,
-				3666E32B1E2AEBF20097F210 /* Extensions.swift */,
-				365ACA0A1E2C0D7600186D98 /* speech2caps-Bridging-Header.h */,
+				3651D6F41E2D7C0A00BD7ACC /* Data Managers */,
+				3651D6F51E2D7C1E00BD7ACC /* Supporting */,
 				365B76B41E2586D5009CDE10 /* Main.storyboard */,
 				365B76B71E2586D5009CDE10 /* Assets.xcassets */,
 				365B76B91E2586D5009CDE10 /* LaunchScreen.storyboard */,
@@ -482,8 +498,8 @@
 			files = (
 				3666E32C1E2AEBF20097F210 /* Extensions.swift in Sources */,
 				365B76B31E2586D5009CDE10 /* ViewController.swift in Sources */,
+				3678B6D61E2D6AE7008F9F30 /* CombinedDataManager.swift in Sources */,
 				3666E3281E2AEBE20097F210 /* SpeechDataManager.swift in Sources */,
-				3666E3351E2B091C0097F210 /* TextFormatter.swift in Sources */,
 				365B76B11E2586D5009CDE10 /* AppDelegate.swift in Sources */,
 				3666E3321E2B01C50097F210 /* AudioDataManager.swift in Sources */,
 				3666E32A1E2AEBEA0097F210 /* Protocols.swift in Sources */,

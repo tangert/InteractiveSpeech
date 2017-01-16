@@ -31,6 +31,7 @@ class ViewController: UIViewController {
     
     static var speechDataDelegate: SpeechDataDelegate?
     static var audioDataDelegate: AudioDataDelegate?
+    
     //testing closures vs delegates
     static var gotData: ((_ data: Float) -> ())?
 
@@ -50,8 +51,10 @@ class ViewController: UIViewController {
         
         print("Loaded view")
         
+        CombinedDataManager.sharedInstance.delegate = self
         AudioDataManager.sharedInstance.instantiate()
         SpeechDataManager.sharedInstance.instantiate()
+        CombinedDataManager.sharedInstance.instantiate()
         
         audioPlot.color = blue
         audioPlot.plotType = .buffer
@@ -105,19 +108,20 @@ class ViewController: UIViewController {
     var micIsOn = false
     @IBAction func toggleMicrophone(_ sender: Any) {
         if micIsOn {
-            print("stopped recording!")
+            print("\n")
+            print("STOP")
             audioEngine.stop()
-            microphone.stopFetchingAudio()
             recognitionRequest?.endAudio()
+            microphone.stopFetchingAudio()
             microphoneButton.setTitle("Start", for: .normal)
             micIsOn = false
         } else {
-            print("started recording!")
+            print("\n")
+            print("START")
             startSpeechRecognition()
             microphone.startFetchingAudio()
             microphoneButton.setTitle("Stop", for: .normal)
             micIsOn = true
-            textView.text = ""
         }
     }
   
@@ -125,10 +129,13 @@ class ViewController: UIViewController {
         audioPlot.clear()
         microphoneButton.setTitle("Start", for: .normal)
         microphone.stopFetchingAudio()
+        audioEngine.stop()
+        recognitionRequest?.endAudio()
         micIsOn = false
         
         AudioDataManager.sharedInstance.amplitudeValues.removeAll()
         AudioDataManager.sharedInstance.dBValues.removeAll()
+        SpeechDataManager.sharedInstance.originalTextArray.removeAll()
         
         lowValue.text = "0.00"
         currentValue.text = "0.00"
@@ -150,12 +157,6 @@ class ViewController: UIViewController {
         default:
             break
         }
-    }
-    
-    enum audioLevel {
-        case low
-        case avg
-        case high
     }
     
     func startSpeechRecognition() {
@@ -191,9 +192,12 @@ class ViewController: UIViewController {
             var isFinal = false
             
             if result != nil {
-                
                 self.textView.text = result?.bestTranscription.formattedString
                 isFinal = (result?.isFinal)!
+                
+                //for some reason sending each individual word doesn't work!
+                ViewController.audioDataDelegate?.didReceiveSpeechSet()
+                ViewController.speechDataDelegate?.didReceiveSpeechSet(input: (result?.bestTranscription.segments)!)
             }
             
             if error != nil || isFinal {  //10
@@ -219,11 +223,25 @@ class ViewController: UIViewController {
         } catch {
             print("audioEngine couldn't start because of an error.")
         }
-        
-        textView.text = "Say something, I'm listening!"
     }
 
 }
+
+
+extension ViewController: CombinedDataDelegate {
+    func didFormatStrings(input: [NSAttributedString]) {
+        
+        let fullString = NSMutableAttributedString()
+        
+        //receive string
+        for word in input {
+            fullString.append(word)
+        }
+        
+        self.textView.attributedText = fullString
+    }
+}
+
 
 extension ViewController: SFSpeechRecognizerDelegate {
 
@@ -250,9 +268,6 @@ extension ViewController: EZMicrophoneDelegate {
             vDSP_meanv(buffer[0]!, 1, &meanVal, vDSP_Length(bufferSize))
             vDSP_vdbcon(&meanVal, 1, &one, &meanVal, 1, 1, 0);
             
-            print("Decibel value: \(meanVal)")
-            print("Amplitude: \(meanVal.dB2Amplitude())")
-            
             ViewController.audioDataDelegate?.didUpdateDBValues(input: meanVal)
             ViewController.audioDataDelegate?.didUpdateAmplitude(input: meanVal.dB2Amplitude())
             ViewController.gotData?(meanVal)
@@ -261,11 +276,5 @@ extension ViewController: EZMicrophoneDelegate {
             self.currentValue.text = String(format: "%0.2f", AudioDataManager.sharedInstance.amplitudeValues.last!)
             self.highValue.text = String(format: "%0.2f", AudioDataManager.sharedInstance.amplitudeValues.max()!)
         });
-    }
-}
-
-extension ViewController: EZAudioFFTDelegate {
-    func fft(_ fft: EZAudioFFT!, updatedWithFFTData fftData: UnsafeMutablePointer<Float>!, bufferSize: vDSP_Length) {
-        
     }
 }
