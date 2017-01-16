@@ -16,8 +16,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var lowLabel: UILabel!
     @IBOutlet weak var lowValue: UILabel!
     
-    @IBOutlet weak var avgLabel: UILabel!
-    @IBOutlet weak var avgValue: UILabel!
+    @IBOutlet weak var currentLabel: UILabel!
+    @IBOutlet weak var currentValue: UILabel!
     
     @IBOutlet weak var highLabel: UILabel!
     @IBOutlet weak var highValue: UILabel!
@@ -50,9 +50,7 @@ class ViewController: UIViewController {
         SpeechDataManager.sharedInstance.instantiate()
         
         audioPlot.color = blue
-        audioPlot.plotType = .rolling
-        audioPlot.shouldFill = true
-        audioPlot.shouldMirror = true
+        audioPlot.plotType = .buffer
         
         microphone = EZMicrophone.shared()
         microphone?.delegate = self
@@ -121,19 +119,26 @@ class ViewController: UIViewController {
         microphoneButton.setTitle("Start", for: .normal)
         microphone.stopFetchingAudio()
         micIsOn = false
+        
+        AudioDataManager.sharedInstance.amplitudeValues.removeAll()
+        AudioDataManager.sharedInstance.dBValues.removeAll()
+        
+        self.lowValue.text = "0.0"
+        self.currentValue.text = "0.0"
+        self.highValue.text = "0.0"
     }
     
     @IBAction func changePlotType(_ sender: Any) {
         let selectedSegment = (sender as! UISegmentedControl).selectedSegmentIndex
         switch(selectedSegment){
         case 0:
-            audioPlot.plotType = .rolling
-            audioPlot.shouldFill = true
-            audioPlot.shouldMirror = true
-        case 1:
             audioPlot.plotType = .buffer
             audioPlot.shouldFill = false
             audioPlot.shouldMirror = false
+        case 1:
+            audioPlot.plotType = .rolling
+            audioPlot.shouldFill = true
+            audioPlot.shouldMirror = true
         default:
             break
         }
@@ -160,7 +165,6 @@ extension ViewController: EZMicrophoneDelegate {
         DispatchQueue.main.async(execute: { () -> Void in
             print("New data!")
             self.audioPlot?.updateBuffer(buffer[0], withBufferSize: bufferSize);
-            ViewController.audioDataDelegate?.didUpdateData()
             
             var meanVal: Float = 0.0
             var one:Float = 1.0
@@ -170,6 +174,12 @@ extension ViewController: EZMicrophoneDelegate {
             print("Decibel value: \(meanVal)")
             print("Amplitude: \(meanVal.dB2Amplitude())")
             
+            ViewController.audioDataDelegate?.didUpdateAmplitude(input: meanVal.dB2Amplitude())
+            ViewController.audioDataDelegate?.didUpdateDBValues(input: meanVal)
+            
+            self.currentValue.text = String(format: "%0.2f", AudioDataManager.sharedInstance.amplitudeValues.last!)
+            self.lowValue.text = String(format: "%0.2f", AudioDataManager.sharedInstance.amplitudeValues.min()!)
+            self.highValue.text = String(format: "%0.2f", AudioDataManager.sharedInstance.amplitudeValues.max()!)
         });
     }
 }

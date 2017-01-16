@@ -15,9 +15,14 @@ protocol SpeechDataDelegate {
 }
 
 protocol AudioDataDelegate {
-    func didUpdateData()
+    func didUpdateDBValues(input: Float)
+    func didUpdateAmplitude(input: Float)
 }
 
 protocol AttributeStringDelegate {
     func didReceiveString(string: String)
+}
+
+protocol ValueLabelUpdateDelegate {
+    func willUpdateLabel(input: Float)
 }

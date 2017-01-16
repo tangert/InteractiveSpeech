@@ -12,11 +12,11 @@ import UIKit
 class AudioDataManager {
     
     static var sharedInstance = AudioDataManager()
-    var dBValues: [Float]?
-    var amplitudeValues: [Float]?
+    var dBValues = [Float]()
+    var amplitudeValues = [Float]()
     
-    var inputSensitivedBValues: [Float]?
-    var inputSensitiveAmplitudeValues: [Float]?
+    var inputSensitivedBValues = [Float]()
+    var inputSensitiveAmplitudeValues = [Float]()
     
     func instantiate() { print("Instantiated") }
     
@@ -26,6 +26,11 @@ class AudioDataManager {
 }
 
 extension AudioDataManager: AudioDataDelegate {
-    func didUpdateData() {
+    func didUpdateDBValues(input: Float) {
+        self.dBValues.append(input)
+    }
+    
+    func didUpdateAmplitude(input: Float) {
+        self.amplitudeValues.append(input)
     }
 }

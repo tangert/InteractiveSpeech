@@ -21,6 +21,17 @@ extension Float {
     
 }
 
+extension Array {
+    
+    func average() -> Float {
+        var sum: Float = 0.0
+        for value in self {
+            sum += value as! Float
+        }
+        return sum/Float(self.count)
+    }
+}
+
 //power function shortcut
 infix operator ** { associativity left precedence 170 }
 
