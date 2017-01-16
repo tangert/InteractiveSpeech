@@ -12,7 +12,6 @@ import UIKit
 class SpeechDataManager {
     
     static var sharedInstance = SpeechDataManager()
-    
     var originalTextArray: [String?]?
     var fontSizes: [Int]?
     var attributedText: NSMutableAttributedString?

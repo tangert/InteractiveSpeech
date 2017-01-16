@@ -31,8 +31,12 @@ class ViewController: UIViewController {
     
     static var speechDataDelegate: SpeechDataDelegate?
     static var audioDataDelegate: AudioDataDelegate?
+    //testing closures vs delegates
+    static var gotData: ((_ data: Float) -> ())?
+
     
     //Speech recognition
+    var audioEngine = AVAudioEngine()
     let speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "en-US"))!
     var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     var recognitionTask: SFSpeechRecognitionTask?
@@ -102,20 +106,23 @@ class ViewController: UIViewController {
     @IBAction func toggleMicrophone(_ sender: Any) {
         if micIsOn {
             print("stopped recording!")
+            audioEngine.stop()
             microphone.stopFetchingAudio()
             recognitionRequest?.endAudio()
             microphoneButton.setTitle("Start", for: .normal)
             micIsOn = false
         } else {
             print("started recording!")
+            startSpeechRecognition()
             microphone.startFetchingAudio()
             microphoneButton.setTitle("Stop", for: .normal)
             micIsOn = true
+            textView.text = ""
         }
     }
   
     @IBAction func resetGraph(_ sender: Any) {
-        self.audioPlot.clear()
+        audioPlot.clear()
         microphoneButton.setTitle("Start", for: .normal)
         microphone.stopFetchingAudio()
         micIsOn = false
@@ -123,9 +130,10 @@ class ViewController: UIViewController {
         AudioDataManager.sharedInstance.amplitudeValues.removeAll()
         AudioDataManager.sharedInstance.dBValues.removeAll()
         
-        self.lowValue.text = "0.0"
-        self.currentValue.text = "0.0"
-        self.highValue.text = "0.0"
+        lowValue.text = "0.00"
+        currentValue.text = "0.00"
+        highValue.text = "0.00"
+        textView.text = ""
     }
     
     @IBAction func changePlotType(_ sender: Any) {
@@ -149,12 +157,82 @@ class ViewController: UIViewController {
         case avg
         case high
     }
+    
+    func startSpeechRecognition() {
+        
+        if recognitionTask != nil {
+            recognitionTask?.cancel()
+            recognitionTask = nil
+        }
+        
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(AVAudioSessionCategoryRecord)
+            try audioSession.setMode(AVAudioSessionModeMeasurement)
+            try audioSession.setActive(true, with: .notifyOthersOnDeactivation)
+        } catch {
+            print("audioSession properties weren't set because of an error.")
+        }
+        
+        recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
+        
+        guard let inputNode = audioEngine.inputNode else {
+            fatalError("Audio engine has no input node")
+        }
+        
+        guard let recognitionRequest = recognitionRequest else {
+            fatalError("Unable to create an SFSpeechAudioBufferRecognitionRequest object")
+        }
+        
+        recognitionRequest.shouldReportPartialResults = true
+        
+        recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest, resultHandler: { (result, error) in
+            
+            var isFinal = false
+            
+            if result != nil {
+                
+                self.textView.text = result?.bestTranscription.formattedString
+                isFinal = (result?.isFinal)!
+            }
+            
+            if error != nil || isFinal {  //10
+                self.audioEngine.stop()
+                inputNode.removeTap(onBus: 0)
+                
+                self.recognitionRequest = nil
+                self.recognitionTask = nil
+                
+                self.microphoneButton.isEnabled = true
+            }
+        })
+        
+        let recordingFormat = inputNode.outputFormat(forBus: 0)
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
+            self.recognitionRequest?.append(buffer)
+        }
+        
+        audioEngine.prepare()
+        
+        do {
+            try audioEngine.start()
+        } catch {
+            print("audioEngine couldn't start because of an error.")
+        }
+        
+        textView.text = "Say something, I'm listening!"
+    }
 
 }
 
 extension ViewController: SFSpeechRecognizerDelegate {
+
     func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer, availabilityDidChange available: Bool) {
-        print("speech recognizer delegate called")
+        if available {
+            microphoneButton.isEnabled = true
+        } else {
+            microphoneButton.isEnabled = false
+        }
     }
 }
 
@@ -163,22 +241,24 @@ extension ViewController: EZMicrophoneDelegate {
     func microphone(_ microphone: EZMicrophone, hasAudioReceived buffer: UnsafeMutablePointer<UnsafeMutablePointer<Float>?>!, withBufferSize bufferSize: UInt32, withNumberOfChannels numberOfChannels: UInt32) {
 
         DispatchQueue.main.async(execute: { () -> Void in
-            print("New data!")
             self.audioPlot?.updateBuffer(buffer[0], withBufferSize: bufferSize);
             
+            //meanVal is the mean value from the buffer which represents the current decibel
             var meanVal: Float = 0.0
             var one:Float = 1.0
             vDSP_vsq(buffer[0]!, 1, buffer[0]!, 1, vDSP_Length(bufferSize))
             vDSP_meanv(buffer[0]!, 1, &meanVal, vDSP_Length(bufferSize))
             vDSP_vdbcon(&meanVal, 1, &one, &meanVal, 1, 1, 0);
+            
             print("Decibel value: \(meanVal)")
             print("Amplitude: \(meanVal.dB2Amplitude())")
             
-            ViewController.audioDataDelegate?.didUpdateAmplitude(input: meanVal.dB2Amplitude())
             ViewController.audioDataDelegate?.didUpdateDBValues(input: meanVal)
+            ViewController.audioDataDelegate?.didUpdateAmplitude(input: meanVal.dB2Amplitude())
+            ViewController.gotData?(meanVal)
             
-            self.currentValue.text = String(format: "%0.2f", AudioDataManager.sharedInstance.amplitudeValues.last!)
             self.lowValue.text = String(format: "%0.2f", AudioDataManager.sharedInstance.amplitudeValues.min()!)
+            self.currentValue.text = String(format: "%0.2f", AudioDataManager.sharedInstance.amplitudeValues.last!)
             self.highValue.text = String(format: "%0.2f", AudioDataManager.sharedInstance.amplitudeValues.max()!)
         });
     }

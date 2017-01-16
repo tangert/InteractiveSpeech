@@ -22,6 +22,9 @@ class AudioDataManager {
     
     init() {
         ViewController.audioDataDelegate = self
+        ViewController.gotData = { data in
+//            print("I got the data!")
+        }
     }
 }
 
