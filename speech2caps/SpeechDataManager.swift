@@ -39,9 +39,9 @@ extension SpeechDataManager: SpeechDataDelegate {
         
         //Everytime speech in inputted, calculate the duration of time it took since the last word.
         //Keep a counter variable for the audio data to match up each.
-        for i in 1..<input.count {
-            print("Duration of \(input[i].substring): \(input[i].timestamp - input[i-1].timestamp)")
-        }
+//        for i in 1..<input.count {
+//            print("Duration of \(input[i].substring): \(input[i].timestamp - input[i-1].timestamp)")
+//        }
         
         CombinedDataManager.sharedInstance.words = originalTextArray
         SpeechDataManager.sharedInstance.textFormatDelegate?.willFormatText()

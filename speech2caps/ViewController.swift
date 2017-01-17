@@ -56,6 +56,8 @@ class ViewController: UIViewController {
         
         audioPlot.color = blue
         audioPlot.plotType = .buffer
+        //essentially how big the waves are
+        audioPlot.gain = 10
         
         microphone = EZMicrophone.shared()
         microphone?.delegate = self
