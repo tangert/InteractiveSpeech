@@ -9,6 +9,6 @@
 #ifndef speech2caps_Bridging_Header_h
 #define speech2caps_Bridging_Header_h
 
-#import <EZAudio.h>
+#import <EZAudio/EZAudio.h>
 
 #endif

@@ -10,9 +10,13 @@ import Foundation
 import UIKit
 import Speech
 
-protocol SpeechDataDelegate {
-    func didReceiveWord(input: String)
+protocol SpeechDataDelegate: class {
     func didReceiveSpeechSet(input: [SFTranscriptionSegment])
+}
+
+//optional function!
+extension SpeechDataDelegate {
+    func didReceiveWord(input: String) {}
 }
 
 protocol AudioDataDelegate {

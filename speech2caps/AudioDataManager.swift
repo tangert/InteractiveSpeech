@@ -18,6 +18,8 @@ class AudioDataManager {
     
     var inputSensitivedBValues = [Float]()
     var inputSensitiveAmplitudeValues = [Float]()
+    //Maps each word to a range of amplitude values associated with it's duration
+    var word2AmplitudesDictionary = [String: [Float]]()
     
     func instantiate() { print("Instantiated") }
     
@@ -50,16 +52,20 @@ extension AudioDataManager: AudioDataDelegate {
         //inputSensitiveAmplitudeValues.removeAll()
         //inputSensitivedBValues.removeAll()
         
-        let avgDB = dBValues.last(count: 20).average()
-        let avgAmp = amplitudeValues.last(count: 20).average()
+        //Taking the average and max values of the last 30 values since a word has ended.
+        //Ideally find the distance via timer to find which audio values are specifically associated with a word. 
+        //Create a dictionary mapping each word to an array of amplitude values.
         
-        let maxDB = dBValues.last(count: 20).max()
-        let maxAmp = amplitudeValues.last(count: 20).max()
+        let avgDB = dBValues.last(count: 50).average()
+        let avgAmp = amplitudeValues.last(count: 50).average()
+        
+        let maxDB = dBValues.last(count: 50).max()
+        let maxAmp = amplitudeValues.last(count: 50).max()
         
 //        //Average
 //        self.inputSensitivedBValues.append(avgDB)
 //        self.inputSensitiveAmplitudeValues.append(avgAmp)
-        
+//
         //Max
         self.inputSensitivedBValues.append(maxDB!)
         self.inputSensitiveAmplitudeValues.append(maxAmp!)

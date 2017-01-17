@@ -38,14 +38,14 @@ class CombinedDataManager {
 extension CombinedDataManager: TextFormatterDelegate {
     
     func willFormatText() {
-//0: Clear all relevant values before starting
+        //0: Clear all relevant values before starting
         convertedFontSizes.removeAll()
         attributedWords.removeAll()
         
         
         //1: Map audio values to font size
         for value in amplitudes {
-            let size = mapAudioValueToFontSize(audioValue: value, amplitudeRange: (0.001, 0.1), fontRange: (12, 45))
+            let size = mapAudioValueToFontSize(audioValue: value, amplitudeRange: (0.001, 0.1), fontRange: (10, 100))
             convertedFontSizes.append(size)
         }
         
@@ -59,12 +59,13 @@ extension CombinedDataManager: TextFormatterDelegate {
         
         //2a: Format each string in words with respective font sizes
         //2b: Append each word to array
+        //*Sometimes the word and converted size count mismatch, so append the words based on whether the word count of size count is higher. Trying to fix this now.*
         if words.count <= convertedFontSizes.count {
             for i in 0..<words.count {
                     let formmatedString = formatStringWithFontSize(string: words[i], size: convertedFontSizes[i])
                     attributedWords.append(formmatedString)
                 }
-        }else {
+        } else {
             for i in 0..<convertedFontSizes.count {
                 let formmatedString = formatStringWithFontSize(string: words[i], size: convertedFontSizes[i])
                 attributedWords.append(formmatedString)

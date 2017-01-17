@@ -115,9 +115,7 @@ class ViewController: UIViewController {
             print("\n")
             print("START")
             
-            AudioDataManager.sharedInstance.clearAllData()
-            SpeechDataManager.sharedInstance.clearAllData()
-            CombinedDataManager.sharedInstance.clearAllData()
+            clearAllData()
             
             startSpeechRecognition()
             microphone.startFetchingAudio()
@@ -134,14 +132,18 @@ class ViewController: UIViewController {
         recognitionRequest?.endAudio()
         micIsOn = false
         
-        AudioDataManager.sharedInstance.clearAllData()
-        SpeechDataManager.sharedInstance.clearAllData()
-        CombinedDataManager.sharedInstance.clearAllData()
+        clearAllData()
         
         lowValue.text = "0.00"
         currentValue.text = "0.00"
         highValue.text = "0.00"
         textView.text = "" 
+    }
+    
+    func clearAllData() {
+        AudioDataManager.sharedInstance.clearAllData()
+        SpeechDataManager.sharedInstance.clearAllData()
+        CombinedDataManager.sharedInstance.clearAllData()
     }
     
     @IBAction func changePlotType(_ sender: Any) {
@@ -202,7 +204,7 @@ class ViewController: UIViewController {
                 
             }
             
-            if error != nil || isFinal {  //10
+            if error != nil || isFinal {
                 self.audioEngine.stop()
                 inputNode.removeTap(onBus: 0)
                 
@@ -237,9 +239,8 @@ extension ViewController: CombinedDataDelegate {
         
         //receive string
         for word in input {
-            let space = NSAttributedString(string: " ")
             let wordWithSpace = NSMutableAttributedString()
-            
+            let space = NSAttributedString(string: " ")
             wordWithSpace.append(word)
             wordWithSpace.append(space)
             
