@@ -41,9 +41,7 @@ class ViewController: UIViewController {
     let speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "en-US"))!
     var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     var recognitionTask: SFSpeechRecognitionTask?
-    
     var microphone: EZMicrophone!
-    var fft: EZAudioFFT?
     
     var blue = UIColor(red: 73/255, green: 161/255, blue: 213/255, alpha: 1.0)
     override func viewDidLoad() {
@@ -62,8 +60,6 @@ class ViewController: UIViewController {
         microphone = EZMicrophone.shared()
         microphone?.delegate = self
         
-        fft = EZAudioFFTRolling.fft(withWindowSize: 4096, sampleRate: Float(self.microphone.audioStreamBasicDescription().mSampleRate), delegate: self)
-        
         self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Avenir", size: 20)!]
         microphoneButton.layer.cornerRadius = microphoneButton.layer.frame.width/2
         resetButton.layer.cornerRadius = resetButton.layer.frame.width/2
@@ -72,7 +68,7 @@ class ViewController: UIViewController {
         speechRecognizer.delegate = self
         
         textView.isEditable = false
-        textView.isSelectable = false
+        textView.isScrollEnabled = true
         
         SFSpeechRecognizer.requestAuthorization { (authStatus) in
             var isButtonEnabled = false
@@ -118,6 +114,11 @@ class ViewController: UIViewController {
         } else {
             print("\n")
             print("START")
+            
+            AudioDataManager.sharedInstance.clearAllData()
+            SpeechDataManager.sharedInstance.clearAllData()
+            CombinedDataManager.sharedInstance.clearAllData()
+            
             startSpeechRecognition()
             microphone.startFetchingAudio()
             microphoneButton.setTitle("Stop", for: .normal)
@@ -133,14 +134,14 @@ class ViewController: UIViewController {
         recognitionRequest?.endAudio()
         micIsOn = false
         
-        AudioDataManager.sharedInstance.amplitudeValues.removeAll()
-        AudioDataManager.sharedInstance.dBValues.removeAll()
-        SpeechDataManager.sharedInstance.originalTextArray.removeAll()
+        AudioDataManager.sharedInstance.clearAllData()
+        SpeechDataManager.sharedInstance.clearAllData()
+        CombinedDataManager.sharedInstance.clearAllData()
         
         lowValue.text = "0.00"
         currentValue.text = "0.00"
         highValue.text = "0.00"
-        textView.text = ""
+        textView.text = "" 
     }
     
     @IBAction func changePlotType(_ sender: Any) {
@@ -159,6 +160,7 @@ class ViewController: UIViewController {
         }
     }
     
+    var counter = 0
     func startSpeechRecognition() {
         
         if recognitionTask != nil {
@@ -192,12 +194,12 @@ class ViewController: UIViewController {
             var isFinal = false
             
             if result != nil {
-                self.textView.text = result?.bestTranscription.formattedString
+                self.counter+=1
                 isFinal = (result?.isFinal)!
-                
-                //for some reason sending each individual word doesn't work!
                 ViewController.audioDataDelegate?.didReceiveSpeechSet()
                 ViewController.speechDataDelegate?.didReceiveSpeechSet(input: (result?.bestTranscription.segments)!)
+                print("Count: \(self.counter)")
+                
             }
             
             if error != nil || isFinal {  //10
@@ -235,7 +237,13 @@ extension ViewController: CombinedDataDelegate {
         
         //receive string
         for word in input {
-            fullString.append(word)
+            let space = NSAttributedString(string: " ")
+            let wordWithSpace = NSMutableAttributedString()
+            
+            wordWithSpace.append(word)
+            wordWithSpace.append(space)
+            
+            fullString.append(wordWithSpace)
         }
         
         self.textView.attributedText = fullString

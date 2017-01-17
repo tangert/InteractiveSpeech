@@ -32,6 +32,17 @@ extension Array {
     }
 }
 
+extension Collection {
+    func last(count:Int) -> [Self.Iterator.Element] {
+        let selfCount = self.count as! Int
+        if selfCount <= count - 1 {
+            return Array(self)
+        } else {
+            return Array(self.reversed()[0...count - 1].reversed())
+        }
+    }
+}
+
 //power function shortcut
 infix operator ** { associativity left precedence 170 }
 

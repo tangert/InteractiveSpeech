@@ -23,6 +23,12 @@ class CombinedDataManager {
     var attributedWords = [NSAttributedString]()
     
     func instantiate() { print("Instantiated") }
+    
+    func clearAllData() {
+        words.removeAll()
+        amplitudes.removeAll()
+    }
+    
     init() {
        SpeechDataManager.sharedInstance.textFormatDelegate = self
     }
@@ -39,22 +45,32 @@ extension CombinedDataManager: TextFormatterDelegate {
         
         //1: Map audio values to font size
         for value in amplitudes {
-            let size = mapAudioValueToFontSize(audioValue: value, amplitudeRange: (0, 0.1), fontRange: (12, 45))
+            let size = mapAudioValueToFontSize(audioValue: value, amplitudeRange: (0.001, 0.1), fontRange: (12, 45))
             convertedFontSizes.append(size)
         }
         
-        print("Amplitudes: \(amplitudes)")
+        print("Amplitude count: \(amplitudes.count)")
+        print("Word count: \(words.count)")
+        print("Size count: \(convertedFontSizes.count)")
+        
         print("Words: \(words)")
         print("Converted sizes: \(convertedFontSizes)")
         print("\n")
         
         //2a: Format each string in words with respective font sizes
         //2b: Append each word to array
-        for i in 0..<words.count {
-            let formmatedString = formatStringWithFontSize(string: words[i], size: convertedFontSizes[i])
-            attributedWords.append(formmatedString)
+        if words.count <= convertedFontSizes.count {
+            for i in 0..<words.count {
+                    let formmatedString = formatStringWithFontSize(string: words[i], size: convertedFontSizes[i])
+                    attributedWords.append(formmatedString)
+                }
+        }else {
+            for i in 0..<convertedFontSizes.count {
+                let formmatedString = formatStringWithFontSize(string: words[i], size: convertedFontSizes[i])
+                attributedWords.append(formmatedString)
+            }
         }
-        
+
         //3: send attributed words to the main vc!
         self.delegate?.didFormatStrings(input: attributedWords)
     }
@@ -67,7 +83,7 @@ extension CombinedDataManager: TextFormatterDelegate {
     }
     
     func mapAudioValueToFontSize(audioValue: Float, amplitudeRange: (amp1: Float, amp2: Float), fontRange: (size1: Float, size2: Float)) -> Float {
-        //User linear interpolation to map [0,1] (amplitudes) to a given font range [size1, size2]
+        //Use linear interpolation to map [0,1] (amplitudes) to a given font range [size1, size2]
         //General form: [a,b] - > [c,d] : f(x) = ((d-c)/(b-a))*(x-a)+c
         
         let size = (fontRange.size2 - fontRange.size1)/(amplitudeRange.amp2 - amplitudeRange.amp1)*(audioValue-amplitudeRange.amp1) + fontRange.size1

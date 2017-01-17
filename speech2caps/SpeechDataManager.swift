@@ -20,6 +20,11 @@ class SpeechDataManager {
     
     func instantiate() { print("Instantiated") }
     
+    func clearAllData() {
+        originalTextArray.removeAll()
+        fontSizes.removeAll()
+    }
+    
     init() {
         ViewController.speechDataDelegate = self
     }
@@ -34,6 +39,7 @@ extension SpeechDataManager: SpeechDataDelegate {
         originalTextArray.removeAll()
         for word in input {
             originalTextArray.append(word.substring)
+            print("\(word) timestamp: \(word.timestamp)\n")
         }
         
         CombinedDataManager.sharedInstance.words = originalTextArray
