@@ -35,6 +35,8 @@ extension SpeechDataManager: SpeechDataDelegate {
         for word in input {
             originalTextArray.append(word.substring)
             print("\(word.substring) timestamp: \(word.timestamp)\n")
+            print("DELEGATED Word timestamp: \(word.substring), \(word.timestamp)")
+
         }
         
         //Everytime speech in inputted, calculate the duration of time it took since the last word.

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0FEBA7BE7C4731A8D346DAEA /* Pods_speech2capsUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DEE7CAECAD42CE6B0994FA3 /* Pods_speech2capsUITests.framework */; };
-		3651D6F91E2E8ABA00BD7ACC /* wordSpaceVisualization.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3651D6F71E2E8ABA00BD7ACC /* wordSpaceVisualization.cpp */; };
+		363BE1751E2EB3BA000229BF /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363BE1741E2EB3BA000229BF /* DataViewController.swift */; };
 		365B76B11E2586D5009CDE10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365B76B01E2586D5009CDE10 /* AppDelegate.swift */; };
 		365B76B31E2586D5009CDE10 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365B76B21E2586D5009CDE10 /* ViewController.swift */; };
 		365B76B61E2586D5009CDE10 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 365B76B41E2586D5009CDE10 /* Main.storyboard */; };
@@ -57,8 +57,7 @@
 
 /* Begin PBXFileReference section */
 		2C230DF1C0D45442B6B77A0E /* Pods-speech2capsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-speech2capsTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-speech2capsTests/Pods-speech2capsTests.release.xcconfig"; sourceTree = "<group>"; };
-		3651D6F71E2E8ABA00BD7ACC /* wordSpaceVisualization.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wordSpaceVisualization.cpp; sourceTree = "<group>"; };
-		3651D6F81E2E8ABA00BD7ACC /* wordSpaceVisualization.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = wordSpaceVisualization.hpp; sourceTree = "<group>"; };
+		363BE1741E2EB3BA000229BF /* DataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
 		3651D6FA1E2E8AEF00BD7ACC /* speech2caps-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "speech2caps-Bridging-Header.h"; sourceTree = "<group>"; };
 		365B76AD1E2586D5009CDE10 /* speech2caps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = speech2caps.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		365B76B01E2586D5009CDE10 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -129,14 +128,21 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		363BE1761E2EB3C0000229BF /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				365B76B21E2586D5009CDE10 /* ViewController.swift */,
+				363BE1741E2EB3BA000229BF /* DataViewController.swift */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
 		3651D6F41E2D7C0A00BD7ACC /* Data Managers */ = {
 			isa = PBXGroup;
 			children = (
 				3666E3271E2AEBE20097F210 /* SpeechDataManager.swift */,
 				3666E3311E2B01C50097F210 /* AudioDataManager.swift */,
 				3678B6D51E2D6AE7008F9F30 /* CombinedDataManager.swift */,
-				3651D6F71E2E8ABA00BD7ACC /* wordSpaceVisualization.cpp */,
-				3651D6F81E2E8ABA00BD7ACC /* wordSpaceVisualization.hpp */,
 			);
 			name = "Data Managers";
 			sourceTree = "<group>";
@@ -177,7 +183,7 @@
 			isa = PBXGroup;
 			children = (
 				365B76B01E2586D5009CDE10 /* AppDelegate.swift */,
-				365B76B21E2586D5009CDE10 /* ViewController.swift */,
+				363BE1761E2EB3C0000229BF /* View Controllers */,
 				3651D6F41E2D7C0A00BD7ACC /* Data Managers */,
 				3651D6F51E2D7C1E00BD7ACC /* Supporting */,
 				365B76B41E2586D5009CDE10 /* Main.storyboard */,
@@ -503,11 +509,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				3666E32C1E2AEBF20097F210 /* Extensions.swift in Sources */,
+				363BE1751E2EB3BA000229BF /* DataViewController.swift in Sources */,
 				365B76B31E2586D5009CDE10 /* ViewController.swift in Sources */,
 				3678B6D61E2D6AE7008F9F30 /* CombinedDataManager.swift in Sources */,
 				3666E3281E2AEBE20097F210 /* SpeechDataManager.swift in Sources */,
 				365B76B11E2586D5009CDE10 /* AppDelegate.swift in Sources */,
-				3651D6F91E2E8ABA00BD7ACC /* wordSpaceVisualization.cpp in Sources */,
 				3666E3321E2B01C50097F210 /* AudioDataManager.swift in Sources */,
 				3666E32A1E2AEBEA0097F210 /* Protocols.swift in Sources */,
 			);

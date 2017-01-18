@@ -202,7 +202,10 @@ class ViewController: UIViewController {
                 isFinal = (result?.isFinal)!
                 ViewController.audioDataDelegate?.didReceiveSpeechSet()
                 ViewController.speechDataDelegate?.didReceiveSpeechSet(input: (result?.bestTranscription.segments)!)
-                print("Count: \(self.counter)")
+//              print("Count: \(self.counter)")
+                for word in (result?.bestTranscription.segments)! {
+                    print("DIRECT Word timestamp: \(word.substring), \(word.timestamp)")
+                }
                 
             }
             
@@ -212,6 +215,8 @@ class ViewController: UIViewController {
                 
                 self.recognitionRequest = nil
                 self.recognitionTask = nil
+                self.recognitionRequest?.endAudio()
+                self.microphone.stopFetchingAudio()
                 
                 self.microphoneButton.isEnabled = true
             }

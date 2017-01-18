@@ -79,6 +79,7 @@ extension CombinedDataManager: TextFormatterDelegate {
     
     func formatStringWithFontSize(string: String, size: Float) -> NSAttributedString {
         let formattedSize = [NSFontAttributeName: UIFont.systemFont(ofSize: CGFloat(size))]
+
         let formattedString = NSMutableAttributedString(string: string, attributes: formattedSize)
         return formattedString
     }
@@ -90,5 +91,10 @@ extension CombinedDataManager: TextFormatterDelegate {
         let size = (fontRange.size2 - fontRange.size1)/(amplitudeRange.amp2 - amplitudeRange.amp1)*(audioValue-amplitudeRange.amp1) + fontRange.size1
         
         return size
+    }
+    
+    func mapAudioLengthToKerning(audioLength: Float) -> Float {
+        let kerning: Float = 0
+        return kerning
     }
 }

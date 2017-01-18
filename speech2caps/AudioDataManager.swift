@@ -52,7 +52,7 @@ extension AudioDataManager: AudioDataDelegate {
         //inputSensitiveAmplitudeValues.removeAll()
         //inputSensitivedBValues.removeAll()
         
-        //Taking the average and max values of the last 30 values since a word has ended.
+        //Taking the average and max values of the last 50 values since a word has ended.
         //Ideally find the distance via timer to find which audio values are specifically associated with a word. 
         //Create a dictionary mapping each word to an array of amplitude values.
         
